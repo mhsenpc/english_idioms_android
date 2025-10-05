@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize IdiomData for SharedPreferences
+        IdiomData.init(this);
+
         // Set up toolbar
         setSupportActionBar(findViewById(R.id.toolbar));
         if (getSupportActionBar() != null) {

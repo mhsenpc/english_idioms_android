@@ -1,11 +1,47 @@
 package sibpardazan.gharb.englishidioms;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 public class IdiomData {
-    private static Set<Integer> bookmarkedIdiomIds = new HashSet<>();
+    private static final String PREFS_NAME = "BookmarksPrefs";
+    private static final String KEY_BOOKMARKED_IDS = "bookmarked_idiom_ids";
+    private static Context appContext;
+
+    public static void init(Context context) {
+        appContext = context.getApplicationContext();
+    }
+
+    private static Set<Integer> getBookmarkedIdiomIds() {
+        if (appContext == null) return new HashSet<>();
+
+        SharedPreferences prefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Set<String> bookmarkedStrings = prefs.getStringSet(KEY_BOOKMARKED_IDS, new HashSet<String>());
+        Set<Integer> bookmarkedIds = new HashSet<>();
+
+        for (String idStr : bookmarkedStrings) {
+            bookmarkedIds.add(Integer.parseInt(idStr));
+        }
+        return bookmarkedIds;
+    }
+
+    private static void saveBookmarkedIdiomIds(Set<Integer> bookmarkedIds) {
+        if (appContext == null) return;
+
+        SharedPreferences prefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        Set<String> bookmarkedStrings = new HashSet<>();
+        for (Integer id : bookmarkedIds) {
+            bookmarkedStrings.add(id.toString());
+        }
+
+        editor.putStringSet(KEY_BOOKMARKED_IDS, bookmarkedStrings);
+        editor.apply();
+    }
 
     public static ArrayList<Idiom> getIdioms() {
         ArrayList<Idiom> idioms = new ArrayList<>();
@@ -101,8 +137,9 @@ public class IdiomData {
             "وقتی می‌خواهید داستان طولانی را به صورت خلاصه و سریع تعریف کنید."));
 
         // Restore bookmarked state for each idiom
+        Set<Integer> bookmarkedIds = getBookmarkedIdiomIds();
         for (Idiom idiom : idioms) {
-            if (bookmarkedIdiomIds.contains(idiom.getId())) {
+            if (bookmarkedIds.contains(idiom.getId())) {
                 idiom.setBookmarked(true);
             }
         }
@@ -111,14 +148,19 @@ public class IdiomData {
     }
 
     public static void setBookmarked(int idiomId, boolean bookmarked) {
+        Set<Integer> bookmarkedIds = getBookmarkedIdiomIds();
+
         if (bookmarked) {
-            bookmarkedIdiomIds.add(idiomId);
+            bookmarkedIds.add(idiomId);
         } else {
-            bookmarkedIdiomIds.remove(idiomId);
+            bookmarkedIds.remove(idiomId);
         }
+
+        saveBookmarkedIdiomIds(bookmarkedIds);
     }
 
     public static boolean isBookmarked(int idiomId) {
-        return bookmarkedIdiomIds.contains(idiomId);
+        Set<Integer> bookmarkedIds = getBookmarkedIdiomIds();
+        return bookmarkedIds.contains(idiomId);
     }
 }
