@@ -20,12 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".IdiomDetailActivity"
-            android:exported="false"
-            android:parentActivityName=".MainActivity"
-            android:label="@string/title_activity_idiom_detail" />
-        <activity
+          <activity
             android:name=".BookmarksActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity"

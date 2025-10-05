@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- English Phrase -->
+        <TextView
+            android:id="@+id/tvEnglishPhrase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="#E3F2FD"
+            android:layout_marginBottom="24dp"
+            tools:text="Break a leg" />
+
+        <!-- Example -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Example:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:padding="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvExample"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:padding="12dp"
+            android:background="#F5F5F5"
+            android:layout_marginBottom="20dp"
+            tools:text="Good luck on your performance tonight! Break a leg!" />
+
+        <!-- Persian Translation -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ترجمه فارسی:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:padding="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvPersianTranslation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:padding="12dp"
+            android:background="#F5F5F5"
+            android:layout_marginBottom="20dp"
+            tools:text="موفق باشی" />
+
+        <!-- Persian Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="توضیحات فارسی:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:padding="4dp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvPersianDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:padding="12dp"
+            android:background="#F5F5F5"
+            android:layout_marginBottom="24dp"
+            tools:text="این اصطلاح برای آرزوی موفقیت بخصوص در اجراهای هنری استفاده می‌شود. ریشه این اصطلاح به این باور قدیمی برمی‌گردد که آرزوی مستقیم موفقیت باعث بدشانسی می‌شود." />
+
+        <!-- Bookmark Button -->
+        <Button
+            android:id="@+id/btnBookmark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bookmark"
+            android:textSize="16sp"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"
+            android:padding="12dp" />
+
+    </LinearLayout>
+
+</ScrollView>

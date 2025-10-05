@@ -42,19 +42,34 @@ public class BookmarksActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, bookmarkedIdioms);
         listViewBookmarks.setAdapter(adapter);
 
-        // Set item click listener
+        // Set item click listener - navigate to main activity at specific position
         listViewBookmarks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Find the position of this idiom in the main list
                 Idiom selectedIdiom = bookmarkedIdioms.get(position);
-                Intent intent = new Intent(BookmarksActivity.this, IdiomDetailActivity.class);
-                intent.putExtra("idiom", selectedIdiom);
+                int positionInMainList = findIdiomPositionInMainList(selectedIdiom);
+
+                Intent intent = new Intent(BookmarksActivity.this, MainActivity.class);
+                intent.putExtra("scroll_to_position", positionInMainList);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
             }
         });
 
         // Show appropriate view based on bookmarks
         updateViewVisibility();
+    }
+
+    private int findIdiomPositionInMainList(Idiom targetIdiom) {
+        ArrayList<Idiom> allIdioms = IdiomData.getIdioms();
+        for (int i = 0; i < allIdioms.size(); i++) {
+            if (allIdioms.get(i).getId() == targetIdiom.getId()) {
+                return i;
+            }
+        }
+        return 0; // Default to first position if not found
     }
 
     private void loadBookmarkedIdioms() {
