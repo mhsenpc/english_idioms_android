@@ -90,17 +90,7 @@
             android:layout_marginBottom="24dp"
             tools:text="این اصطلاح برای آرزوی موفقیت بخصوص در اجراهای هنری استفاده می‌شود. ریشه این اصطلاح به این باور قدیمی برمی‌گردد که آرزوی مستقیم موفقیت باعث بدشانسی می‌شود." />
 
-        <!-- Bookmark Button -->
-        <Button
-            android:id="@+id/btnBookmark"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Bookmark"
-            android:textSize="16sp"
-            android:backgroundTint="@android:color/holo_blue_dark"
-            android:textColor="@android:color/white"
-            android:padding="12dp" />
-
+    
     </LinearLayout>
 
 </ScrollView>

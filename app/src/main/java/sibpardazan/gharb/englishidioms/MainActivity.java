@@ -16,11 +16,11 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager2 viewPagerIdioms;
-    private TextView tvIdiomCounter;
     private Button btnPrevious;
     private Button btnNext;
     private ArrayList<Idiom> idioms;
     private IdiomPagerAdapter adapter;
+    private MenuItem bookmarkMenuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize views
         viewPagerIdioms = findViewById(R.id.viewPagerIdioms);
-        tvIdiomCounter = findViewById(R.id.tvIdiomCounter);
         btnPrevious = findViewById(R.id.btnPrevious);
         btnNext = findViewById(R.id.btnNext);
 
@@ -46,21 +45,13 @@ public class MainActivity extends AppCompatActivity {
         adapter = new IdiomPagerAdapter(this, idioms);
         viewPagerIdioms.setAdapter(adapter);
 
-        // Set up bookmark click listener
-        adapter.setOnBookmarkClickListener(new IdiomPagerAdapter.OnBookmarkClickListener() {
-            @Override
-            public void onBookmarkClick(int position) {
-                toggleBookmark(position);
-                adapter.notifyItemChanged(position);
-            }
-        });
-
-        // Set up page change callback to update counter and button states
+    
+        // Set up page change callback to update button states and bookmark icon
         viewPagerIdioms.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                updateCounter(position);
                 updateNavigationButtons(position);
+                updateBookmarkIcon(position);
             }
         });
 
@@ -84,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         viewPagerIdioms.setCurrentItem(scrollToPosition);
 
         // Initialize UI
-        updateCounter(scrollToPosition);
         updateNavigationButtons(scrollToPosition);
+        updateBookmarkIcon(scrollToPosition);
     }
 
     private void navigatePrevious() {
@@ -102,10 +93,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateCounter(int position) {
-        tvIdiomCounter.setText((position + 1) + " / " + idioms.size());
-    }
-
+    
     private void updateNavigationButtons(int position) {
         btnPrevious.setEnabled(position > 0);
         btnNext.setEnabled(position < idioms.size() - 1);
@@ -114,11 +102,27 @@ public class MainActivity extends AppCompatActivity {
     private void toggleBookmark(int position) {
         Idiom currentIdiom = idioms.get(position);
         currentIdiom.setBookmarked(!currentIdiom.isBookmarked());
+        updateBookmarkIcon(position);
+    }
+
+    private void updateBookmarkIcon(int position) {
+        if (bookmarkMenuItem != null) {
+            Idiom currentIdiom = idioms.get(position);
+            if (currentIdiom.isBookmarked()) {
+                bookmarkMenuItem.setIcon(android.R.drawable.star_on);
+                bookmarkMenuItem.setTitle("Remove Bookmark");
+            } else {
+                bookmarkMenuItem.setIcon(android.R.drawable.star_off);
+                bookmarkMenuItem.setTitle("Bookmark");
+            }
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        bookmarkMenuItem = menu.findItem(R.id.action_bookmark_current);
+        updateBookmarkIcon(viewPagerIdioms.getCurrentItem());
         return true;
     }
 
@@ -126,7 +130,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_bookmarks) {
+        if (id == R.id.action_bookmark_current) {
+            toggleBookmark(viewPagerIdioms.getCurrentItem());
+            return true;
+        } else if (id == R.id.action_bookmarks) {
             Intent intent = new Intent(this, BookmarksActivity.class);
             startActivity(intent);
             return true;
