@@ -1,8 +1,12 @@
 package sibpardazan.gharb.englishidioms;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class IdiomData {
+    private static Set<Integer> bookmarkedIdiomIds = new HashSet<>();
+
     public static ArrayList<Idiom> getIdioms() {
         ArrayList<Idiom> idioms = new ArrayList<>();
 
@@ -96,6 +100,25 @@ public class IdiomData {
             "خلاصه بگویم",
             "وقتی می‌خواهید داستان طولانی را به صورت خلاصه و سریع تعریف کنید."));
 
+        // Restore bookmarked state for each idiom
+        for (Idiom idiom : idioms) {
+            if (bookmarkedIdiomIds.contains(idiom.getId())) {
+                idiom.setBookmarked(true);
+            }
+        }
+
         return idioms;
+    }
+
+    public static void setBookmarked(int idiomId, boolean bookmarked) {
+        if (bookmarked) {
+            bookmarkedIdiomIds.add(idiomId);
+        } else {
+            bookmarkedIdiomIds.remove(idiomId);
+        }
+    }
+
+    public static boolean isBookmarked(int idiomId) {
+        return bookmarkedIdiomIds.contains(idiomId);
     }
 }

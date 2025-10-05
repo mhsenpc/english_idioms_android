@@ -101,7 +101,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void toggleBookmark(int position) {
         Idiom currentIdiom = idioms.get(position);
-        currentIdiom.setBookmarked(!currentIdiom.isBookmarked());
+        boolean newState = !currentIdiom.isBookmarked();
+        currentIdiom.setBookmarked(newState);
+        IdiomData.setBookmarked(currentIdiom.getId(), newState);
         updateBookmarkIcon(position);
     }
 
