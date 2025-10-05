@@ -1,67 +1,74 @@
 package sibpardazan.gharb.englishidioms;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import sibpardazan.gharb.englishidioms.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private ListView listViewIdioms;
+    private ArrayList<Idiom> idioms;
+    private ArrayAdapter<Idiom> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        // Set up toolbar
+        setSupportActionBar(findViewById(R.id.toolbar));
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("English Idioms");
+        }
 
-        setSupportActionBar(binding.toolbar);
+        // Initialize views
+        listViewIdioms = findViewById(R.id.listViewIdioms);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        // Load idioms data
+        idioms = IdiomData.getIdioms();
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        // Create adapter
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, idioms);
+        listViewIdioms.setAdapter(adapter);
+
+        // Set item click listener
+        listViewIdioms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAnchorView(R.id.fab)
-                        .setAction("Action", null).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Idiom selectedIdiom = idioms.get(position);
+                Intent intent = new Intent(MainActivity.this, IdiomDetailActivity.class);
+                intent.putExtra("idiom", selectedIdiom);
+                startActivity(intent);
             }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_bookmarks) {
+            Intent intent = new Intent(this, BookmarksActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -69,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
+    protected void onResume() {
+        super.onResume();
+        // Refresh the list to show bookmark updates
+        adapter.notifyDataSetChanged();
     }
 }

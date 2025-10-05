@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    tools:context=".BookmarksActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -15,17 +15,35 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            app:title="Bookmarks" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ListView
-        android:id="@+id/listViewIdioms"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:padding="8dp"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <ListView
+            android:id="@+id/listViewBookmarks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp" />
+
+        <TextView
+            android:id="@+id/tvNoBookmarks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No bookmarks yet. Start bookmarking your favorite idioms!"
+            android:textSize="16sp"
+            android:textColor="@android:color/darker_gray"
+            android:gravity="center"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
