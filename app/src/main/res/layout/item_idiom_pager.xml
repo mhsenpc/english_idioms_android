@@ -46,6 +46,16 @@
             android:layout_marginBottom="20dp"
             tools:text="Good luck on your performance tonight! Break a leg!" />
 
+        <!-- Idiom Image -->
+        <ImageView
+            android:id="@+id/ivIdiomImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="20dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Idiom illustration"
+            android:background="#E0E0E0" />
+
         <!-- Persian Translation -->
         <TextView
             android:layout_width="match_parent"

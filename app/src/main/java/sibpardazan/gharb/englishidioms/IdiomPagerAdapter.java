@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,40 @@ public class IdiomPagerAdapter extends RecyclerView.Adapter<IdiomPagerAdapter.Id
         holder.tvExample.setText(currentIdiom.getExample());
         holder.tvPersianTranslation.setText(currentIdiom.getPersianTranslation());
         holder.tvPersianDescription.setText(currentIdiom.getPersianDescription());
+
+        // Load image with error handling
+        loadImage(holder.ivIdiomImage, currentIdiom.getImageName());
+    }
+
+    private void loadImage(ImageView imageView, String imageName) {
+        if (imageName == null || imageName.trim().isEmpty()) {
+            // Hide image view if no image name provided
+            imageView.setVisibility(View.GONE);
+            return;
+        }
+
+        imageView.setVisibility(View.VISIBLE);
+
+        try {
+            // Get resource ID for the image name
+            int resourceId = context.getResources().getIdentifier(
+                imageName,
+                "drawable",
+                context.getPackageName()
+            );
+
+            if (resourceId != 0) {
+                // Resource found, load the image
+                imageView.setImageResource(resourceId);
+                imageView.setBackgroundColor(0x00000000); // Transparent background
+            } else {
+                // Resource not found, hide the image view
+                imageView.setVisibility(View.GONE);
+            }
+        } catch (Exception e) {
+            // Any error loading image, hide the image view
+            imageView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -50,6 +85,7 @@ public class IdiomPagerAdapter extends RecyclerView.Adapter<IdiomPagerAdapter.Id
         TextView tvExample;
         TextView tvPersianTranslation;
         TextView tvPersianDescription;
+        ImageView ivIdiomImage;
 
         public IdiomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,6 +93,7 @@ public class IdiomPagerAdapter extends RecyclerView.Adapter<IdiomPagerAdapter.Id
             tvExample = itemView.findViewById(R.id.tvExample);
             tvPersianTranslation = itemView.findViewById(R.id.tvPersianTranslation);
             tvPersianDescription = itemView.findViewById(R.id.tvPersianDescription);
+            ivIdiomImage = itemView.findViewById(R.id.ivIdiomImage);
         }
     }
 }
