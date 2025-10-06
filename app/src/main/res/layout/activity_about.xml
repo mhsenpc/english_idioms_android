@@ -96,10 +96,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Developed by: Sibpardazan Gharb"
-                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                android:text="Developed by: Mohsen Shamohammadi"
                 android:textColor="@android:color/black"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
