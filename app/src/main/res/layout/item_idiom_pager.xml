@@ -50,11 +50,11 @@
         <ImageView
             android:id="@+id/ivIdiomImage"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:layout_marginBottom="20dp"
-            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
             android:contentDescription="Idiom illustration"
-            android:background="#E0E0E0" />
+            android:scaleType="centerInside" />
 
         <!-- Persian Translation -->
         <TextView
