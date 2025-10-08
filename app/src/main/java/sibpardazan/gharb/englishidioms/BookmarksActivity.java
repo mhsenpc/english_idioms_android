@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,7 +16,7 @@ public class BookmarksActivity extends AppCompatActivity {
     private ListView listViewBookmarks;
     private TextView tvNoBookmarks;
     private ArrayList<Idiom> bookmarkedIdioms;
-    private ArrayAdapter<Idiom> adapter;
+    private BookmarkAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class BookmarksActivity extends AppCompatActivity {
         loadBookmarkedIdioms();
 
         // Set up adapter
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, bookmarkedIdioms);
+        adapter = new BookmarkAdapter(this, bookmarkedIdioms);
         listViewBookmarks.setAdapter(adapter);
 
         // Set item click listener - navigate to main activity at specific position
@@ -98,8 +97,6 @@ public class BookmarksActivity extends AppCompatActivity {
         super.onResume();
         // Reload bookmarks and refresh the list
         loadBookmarkedIdioms();
-        adapter.clear();
-        adapter.addAll(bookmarkedIdioms);
         adapter.notifyDataSetChanged();
         updateViewVisibility();
     }
