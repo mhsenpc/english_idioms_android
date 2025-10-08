@@ -146,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.action_copyrighted_content) {
+            Intent intent = new Intent(this, CopyrightedContentActivity.class);
+            startActivity(intent);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -30,6 +30,11 @@
             android:exported="false"
             android:parentActivityName=".MainActivity"
             android:label="@string/title_activity_about" />
+        <activity
+            android:name=".CopyrightedContentActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity"
+            android:label="References" />
     </application>
 
 </manifest>
