@@ -98,8 +98,15 @@ public class MainActivity extends AppCompatActivity {
 
     
     private void updateNavigationButtons(int position) {
-        btnPrevious.setEnabled(position > 0);
-        btnNext.setEnabled(position < idioms.size() - 1);
+        boolean isAtFirst = position <= 0;
+        boolean isAtLast = position >= idioms.size() - 1;
+
+        btnPrevious.setEnabled(!isAtFirst);
+        btnNext.setEnabled(!isAtLast);
+
+        // Update button appearance to better indicate disabled state
+        btnPrevious.setAlpha(isAtFirst ? 0.5f : 1.0f);
+        btnNext.setAlpha(isAtLast ? 0.5f : 1.0f);
     }
 
     private void toggleBookmark(int position) {
