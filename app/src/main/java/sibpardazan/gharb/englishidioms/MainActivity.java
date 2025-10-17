@@ -2,23 +2,25 @@ package sibpardazan.gharb.englishidioms;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
     private ViewPager2 viewPagerIdioms;
     private Button btnPrevious;
     private Button btnNext;
-    private ArrayList<Idiom> idioms;
+    private EditText searchEditText;
+    private ArrayList<Idiom> allIdioms;
+    private ArrayList<Idiom> filteredIdioms;
     private IdiomPagerAdapter adapter;
     private MenuItem bookmarkMenuItem;
 
@@ -40,15 +42,32 @@ public class MainActivity extends AppCompatActivity {
         viewPagerIdioms = findViewById(R.id.viewPagerIdioms);
         btnPrevious = findViewById(R.id.btnPrevious);
         btnNext = findViewById(R.id.btnNext);
+        searchEditText = findViewById(R.id.searchEditText);
 
         // Load idioms data
-        idioms = IdiomData.getIdioms();
+        allIdioms = IdiomData.getIdioms();
+        filteredIdioms = new ArrayList<>(allIdioms);
 
         // Create adapter
-        adapter = new IdiomPagerAdapter(this, idioms);
+        adapter = new IdiomPagerAdapter(this, filteredIdioms);
         viewPagerIdioms.setAdapter(adapter);
 
-    
+        // Set up search functionality
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterIdioms(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         // Set up page change callback to update button states and bookmark icon
         viewPagerIdioms.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -82,6 +101,31 @@ public class MainActivity extends AppCompatActivity {
         updateBookmarkIcon(scrollToPosition);
     }
 
+    private void filterIdioms(String query) {
+        filteredIdioms.clear();
+        
+        if (query.isEmpty()) {
+            filteredIdioms.addAll(allIdioms);
+        } else {
+            String lowerCaseQuery = query.toLowerCase();
+            for (Idiom idiom : allIdioms) {
+                if (idiom.getName().toLowerCase().contains(lowerCaseQuery) ||
+                    idiom.getMeaning().toLowerCase().contains(lowerCaseQuery)) {
+                    filteredIdioms.add(idiom);
+                }
+            }
+        }
+        
+        adapter.notifyDataSetChanged();
+        
+        // Reset to first item after filtering
+        if (!filteredIdioms.isEmpty()) {
+            viewPagerIdioms.setCurrentItem(0);
+            updateNavigationButtons(0);
+            updateBookmarkIcon(0);
+        }
+    }
+
     private void navigatePrevious() {
         int currentItem = viewPagerIdioms.getCurrentItem();
         if (currentItem > 0) {
@@ -91,15 +135,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void navigateNext() {
         int currentItem = viewPagerIdioms.getCurrentItem();
-        if (currentItem < idioms.size() - 1) {
+        if (currentItem < filteredIdioms.size() - 1) {
             viewPagerIdioms.setCurrentItem(currentItem + 1);
         }
     }
 
-    
     private void updateNavigationButtons(int position) {
         boolean isAtFirst = position <= 0;
-        boolean isAtLast = position >= idioms.size() - 1;
+        boolean isAtLast = position >= filteredIdioms.size() - 1;
 
         btnPrevious.setEnabled(!isAtFirst);
         btnNext.setEnabled(!isAtLast);
@@ -110,16 +153,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toggleBookmark(int position) {
-        Idiom currentIdiom = idioms.get(position);
-        boolean newState = !currentIdiom.isBookmarked();
-        currentIdiom.setBookmarked(newState);
-        IdiomData.setBookmarked(currentIdiom.getId(), newState);
-        updateBookmarkIcon(position);
+        if (position >= 0 && position < filteredIdioms.size()) {
+            Idiom currentIdiom = filteredIdioms.get(position);
+            boolean newState = !currentIdiom.isBookmarked();
+            currentIdiom.setBookmarked(newState);
+            IdiomData.setBookmarked(currentIdiom.getId(), newState);
+            updateBookmarkIcon(position);
+        }
     }
 
     private void updateBookmarkIcon(int position) {
-        if (bookmarkMenuItem != null) {
-            Idiom currentIdiom = idioms.get(position);
+        if (bookmarkMenuItem != null && position >= 0 && position < filteredIdioms.size()) {
+            Idiom currentIdiom = filteredIdioms.get(position);
             if (currentIdiom.isBookmarked()) {
                 bookmarkMenuItem.setIcon(android.R.drawable.star_on);
                 bookmarkMenuItem.setTitle("Remove Bookmark");
