@@ -25,20 +25,6 @@
         android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical">
 
-        <!-- Search Bar -->
-        <EditText
-            android:id="@+id/searchEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Search idioms..."
-            android:padding="16dp"
-            android:background="@android:color/white"
-            android:elevation="2dp"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
-            android:drawableStart="@android:drawable/ic_menu_search"
-            android:drawablePadding="8dp" />
-
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerIdioms"
             android:layout_width="match_parent"
